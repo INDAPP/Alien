@@ -7,10 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 import it.earthgardeners.alien.AlienRepository
 
 import it.earthgardeners.alien.R
 import it.earthgardeners.alien.models.Creature
+import kotlinx.android.synthetic.main.fragment_creature.*
 
 private const val ARG_CREATURE_TYPE = "creature_type"
 private const val ARG_TAG = "tag"
@@ -40,6 +43,19 @@ class CreatureFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_creature, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val creature = this.creature ?: return
+        textViewName.text = creature.name
+
+        val folder = when (creature.type) {
+            Creature.Type.PLANT -> "plant"
+            Creature.Type.ANIMAL -> "animal"
+        }
+        val imageRef = FirebaseStorage.getInstance().getReference("$folder/${creature.tag}.jpg")
+        Glide.with(this).load(imageRef).into(imageViewCreature)
     }
 
     override fun onAttach(context: Context) {

@@ -9,8 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 import it.earthgardeners.alien.AlienRepository
 import it.earthgardeners.alien.EXTRA_HABITAT_TAG
 import it.earthgardeners.alien.R
@@ -74,13 +77,16 @@ class GameActivity : AppCompatActivity() {
         this.viewPagerAdapter = CreaturesPagerAdapter(supportFragmentManager)
         this.recyclerViewAdapter = CreaturesRecyclerViewAdapter()
 
-        viewPager.addOnPageChangeListener(CircularViewPagerHandler(viewPager))
+//        viewPager.addOnPageChangeListener(CircularViewPagerHandler(viewPager))
         viewPager.adapter = this.viewPagerAdapter
 
         recyclerView.layoutManager = GridLayoutManager(this, 2, RecyclerView.HORIZONTAL, false)
         recyclerView.adapter = this.recyclerViewAdapter
 
-        //TODO: impostare lo sfondo giusto
+        val imageRef = FirebaseStorage.getInstance().getReference("habitat/${habitat.tag}.jpg")
+
+        Glide.with(this).load(imageRef).into(imageView)
+
         //TODO: impostare i suoni di sottofondo
 
         buttonInsert.setOnClickListener(this::insertCreature)
@@ -88,10 +94,12 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun insertCreature(view: View) {
-        this.creatures.add(currentCreature)
-        recyclerViewAdapter.notifyDataSetChanged()
         checkInsertedCreature(currentCreature)
-        nextCreature()
+        when (creaturesType) {
+            Creature.Type.PLANT -> plants.removeAt(currentCreatureIndex)
+            Creature.Type.ANIMAL -> animals.removeAt(currentCreatureIndex)
+        }
+        viewPagerAdapter.notifyDataSetChanged()
     }
 
     private fun discardCreature(view: View) {
@@ -110,6 +118,8 @@ class GameActivity : AppCompatActivity() {
         when {
             creature.alien.contains(habitat.tag) -> return gameOver()
             creature.habitat.contains(habitat.tag) -> {
+                this.creatures.add(currentCreature)
+                recyclerViewAdapter.notifyDataSetChanged()
                 //TODO: suono specie corretta
                 calculateProgress()
             }
@@ -138,7 +148,7 @@ class GameActivity : AppCompatActivity() {
 
     }
 
-    inner class CreaturesPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
+    inner class CreaturesPagerAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment = when (creaturesType) {
             Creature.Type.PLANT -> CreatureFragment.newInstance(this@GameActivity.plants[position])

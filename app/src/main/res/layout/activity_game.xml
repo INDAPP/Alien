@@ -31,7 +31,7 @@
     <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:srcCompat="@drawable/ic_img_splash_background"
+            app:srcCompat="@drawable/img_background"
             android:id="@+id/imageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -65,15 +65,21 @@
             app:layout_constraintStart_toEndOf="@id/buttonDiscard"
             app:layout_constraintBottom_toBottomOf="parent"
     />
-    <androidx.viewpager.widget.ViewPager
-            android:layout_width="300dp"
-            android:layout_height="300dp" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/buttonDiscard" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/viewPager"/>
-    <androidx.recyclerview.widget.RecyclerView
+    <it.earthgardeners.alien.views.UnswipeableViewPager
             android:layout_width="0dp"
-            android:layout_height="128dp" android:layout_marginBottom="8dp"
+            android:layout_height="300dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonDiscard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:clipToPadding="false"
+            android:id="@+id/viewPager"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="156dp" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/viewPager" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="32dp" android:layout_marginEnd="32dp" android:id="@+id/recyclerView"
