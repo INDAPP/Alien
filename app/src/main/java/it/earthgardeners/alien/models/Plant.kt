@@ -8,9 +8,12 @@ package it.earthgardeners.alien.models
  */
 
 data class Plant(
-    override val name: String,
-    override val tag: String,
-    override val description: String,
-    override val alien: List<String>,
-    override val habitat: List<String>
-): Creature
+    override val name: String? = null,
+    override val tag: String = "",
+    override val description: String? = null,
+    override val alien: List<String> = emptyList(),
+    override val habitat: List<String> = emptyList()
+): Creature {
+    override val type: Creature.Type
+        get() = Creature.Type.PLANT
+}

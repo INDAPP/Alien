@@ -8,7 +8,7 @@ package it.earthgardeners.alien.models
  */
 
 data class Habitat(
-    val name: String,
-    val tag: String,
-    val description: String
+    val name: String? = null,
+    val tag: String = "",
+    val description: String? = null
 )

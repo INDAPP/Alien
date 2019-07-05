@@ -14,7 +14,7 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".SplashActivity"
+                android:name=".activities.SplashActivity"
                 android:screenOrientation="portrait"
                 android:noHistory="true"
         >
@@ -25,19 +25,19 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".MainActivity"
+                android:name=".activities.MainActivity"
                 android:screenOrientation="portrait"
         />
         <activity
-                android:name=".HabitatActivity"
+                android:name=".activities.HabitatActivity"
                 android:screenOrientation="portrait"
         />
         <activity
-                android:name=".ScoreActivity"
+                android:name=".activities.ScoreActivity"
                 android:screenOrientation="portrait"
         />
         <activity
-                android:name=".GameActivity"
+                android:name=".activities.GameActivity"
                 android:screenOrientation="portrait"
         />
     </application>

@@ -7,9 +7,18 @@ package it.earthgardeners.alien.models
  * info@indapp.it
  */
 interface Creature {
-    val name: String
+    val name: String?
     val tag: String
-    val description: String
+    val description: String?
     val alien: List<String>
     val habitat: List<String>
+
+    val type: Type
+
+    enum class Type {
+        ANIMAL,
+        PLANT
+    }
+
 }
+

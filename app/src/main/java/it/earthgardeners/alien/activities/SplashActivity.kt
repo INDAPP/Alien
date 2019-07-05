@@ -1,8 +1,10 @@
-package it.earthgardeners.alien
+package it.earthgardeners.alien.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import it.earthgardeners.alien.AlienRepository
+import it.earthgardeners.alien.R
 
 class SplashActivity : AppCompatActivity() {
 
