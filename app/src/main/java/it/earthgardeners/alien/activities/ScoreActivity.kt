@@ -21,11 +21,11 @@ class ScoreActivity : AppCompatActivity() {
         val wrong = intent?.getFloatExtra(EXTRA_ERROR_COUNT, 0f)?: return finish()
         val total = intent?.getFloatExtra(EXTRA_TOTAL_COUNT, 0f)?: return finish()
 
-        textViewWrong.text = "$wrong"
+        textViewWrong.text = "${wrong.toInt()}"
         textViewTime.text =time.timer
 
         val result = (total - wrong)/time*10000
-        textViewPoints.text = "$result"
+        textViewPoints.text = "${result.toInt()}"
 
         MediaPlayer.create(this, R.raw.win)?.start()
     }
