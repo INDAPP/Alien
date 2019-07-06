@@ -13,7 +13,36 @@
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/habitat_white_background">
+            android:background="@drawable/habitat_white_background" android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp">
 
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:textSize="24sp"
+                android:drawableStart="@drawable/ic_timer" tools:layout_editor_absoluteY="46dp"
+                tools:layout_editor_absoluteX="124dp" android:gravity="center" android:drawablePadding="8dp"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2"
+                android:textSize="24sp"
+                tools:layout_editor_absoluteY="142dp" tools:layout_editor_absoluteX="124dp"/>
+        <View
+                android:layout_width="0dp"
+                android:layout_height="2dp" android:id="@+id/view"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="32dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="32dp" android:background="#000000" tools:layout_editor_absoluteY="216dp"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:textSize="24sp"
+                tools:layout_editor_absoluteY="268dp" tools:layout_editor_absoluteX="124dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
