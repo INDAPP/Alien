@@ -15,9 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
-import it.earthgardeners.alien.AlienRepository
-import it.earthgardeners.alien.EXTRA_HABITAT_TAG
-import it.earthgardeners.alien.R
+import it.earthgardeners.alien.*
 import it.earthgardeners.alien.fragments.CreatureFragment
 import it.earthgardeners.alien.listeners.CircularViewPagerHandler
 import it.earthgardeners.alien.models.Animal
@@ -58,6 +56,8 @@ class GameActivity : AppCompatActivity() {
             Creature.Type.ANIMAL -> animals[currentCreatureIndex]
         }
 
+    private var errorCounter = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -81,6 +81,7 @@ class GameActivity : AppCompatActivity() {
         targetAnimalsCount = (this.animals.count { it.habitat.contains(habitat.tag) } + 1) / 2
 
         progressBar.max = targetPlantsCount + targetAnimalsCount
+        progressBar.progress = 0
 
         this.viewPagerAdapter = CreaturesPagerAdapter(supportFragmentManager)
         this.recyclerViewAdapter = CreaturesRecyclerViewAdapter()
@@ -103,11 +104,13 @@ class GameActivity : AppCompatActivity() {
 
     private fun insertCreature(view: View) {
         checkInsertedCreature(currentCreature)
-        when (creaturesType) {
-            Creature.Type.PLANT -> plants.removeAt(currentCreatureIndex)
-            Creature.Type.ANIMAL -> animals.removeAt(currentCreatureIndex)
-        }
-        viewPagerAdapter.notifyDataSetChanged()
+        nextCreature()
+        mediaPlayer = MediaPlayer.create(this, R.raw.choose)
+//        when (creaturesType) {
+//            Creature.Type.PLANT -> plants.removeAt(currentCreatureIndex)
+//            Creature.Type.ANIMAL -> animals.removeAt(currentCreatureIndex)
+//        }
+//        viewPagerAdapter.notifyDataSetChanged()
     }
 
     private fun discardCreature(view: View) {
@@ -118,38 +121,50 @@ class GameActivity : AppCompatActivity() {
     private fun nextCreature() {
         currentCreatureIndex++
         viewPager.setCurrentItem(currentCreatureIndex % creaturesTypeCount, true)
+        if (creatures.contains(currentCreature)) nextCreature()
     }
 
     private fun checkInsertedCreature(creature: Creature) {
-        mediaPlayer = MediaPlayer.create(this, R.raw.choose)
-
         when {
-            creature.alien.contains(habitat.tag) -> return gameOver()
+            creature.alien.contains(habitat.tag) -> {
+                toast("Hai inserito una specie Aliena!!")
+                return gameOver()
+            }
             creature.habitat.contains(habitat.tag) -> {
                 this.creatures.add(currentCreature)
                 recyclerViewAdapter.notifyDataSetChanged()
                 calculateProgress()
             }
             else -> {
-
+                errorCounter++
+                //TODO: animazione alieno??
+                checkGameOver()
             }
         }
 
     }
 
     private fun calculateProgress() {
-        val validCreatures = creatures.count { it.habitat.contains(habitat.tag) }
-        progressBar.progress = validCreatures
-        if (validCreatures == targetPlantsCount) {
+        progressBar.progress = creatures.size
+        if (creatures.size == targetPlantsCount) {
             creaturesType = Creature.Type.ANIMAL
             viewPagerAdapter.notifyDataSetChanged()
             //TODO: mostrare un popup/suono intermedio?
-        } else if (validCreatures == targetPlantsCount + targetAnimalsCount) {
+        } else if (creatures.size == targetPlantsCount + targetAnimalsCount) {
             startActivity(
                 Intent(this, ScoreActivity::class.java).apply {
-
+                    putExtra(EXTRA_TOTAL_COUNT, (targetPlantsCount+targetAnimalsCount).toFloat())
+                    putExtra(EXTRA_ERROR_COUNT, errorCounter.toFloat())
+                    putExtra(EXTRA_TIME, 0) //timer contatore
                 }
             )
+        }
+    }
+
+    private fun checkGameOver() {
+        if (errorCounter >= targetPlantsCount + targetAnimalsCount) {
+            toast("Hai commesso troppi errori!!")
+            gameOver()
         }
     }
 
@@ -159,7 +174,7 @@ class GameActivity : AppCompatActivity() {
         )
     }
 
-    inner class CreaturesPagerAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
+    inner class CreaturesPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment = when (creaturesType) {
             Creature.Type.PLANT -> CreatureFragment.newInstance(this@GameActivity.plants[position])

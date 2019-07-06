@@ -18,6 +18,10 @@ class GameOverActivity : AppCompatActivity() {
         Handler().postDelayed(this::close, 5000)
     }
 
+    override fun onBackPressed() {
+        close()
+    }
+
     private fun close() {
         ActivityCompat.finishAffinity(this)
     }
