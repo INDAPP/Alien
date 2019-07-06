@@ -133,7 +133,7 @@ class GameActivity : AppCompatActivity() {
     private fun onHabitatSoundSuccess(uri: Uri) {
         this.habitatMediaPlayer = MediaPlayer.create(this, uri).apply {
 //            setAudioStreamType(AudioManager.STREAM_MUSIC)
-            setVolume(0.5f, 0.5f)
+            setVolume(0.4f, 0.4f)
             isLooping = true
             setOnPreparedListener(MediaPlayer::start)
 //            prepareAsync() // might take long! (for buffering, etc)

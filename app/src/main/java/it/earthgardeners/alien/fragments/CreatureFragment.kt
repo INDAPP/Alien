@@ -1,10 +1,16 @@
 package it.earthgardeners.alien.fragments
 
 import android.content.Context
+import android.graphics.Typeface
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -115,10 +121,18 @@ class CreatureFragment : Fragment() {
     }
 
     private fun showInfo(view: View) {
+        val latinCount = creature?.latin?.length
+        val latin = creature?.latin?.let { "$it\n\n" } ?: ""
+        val description = creature?.description ?: ""
+        val message = SpannableString("$latin$description").apply {
+            latinCount?.let { count ->
+                setSpan(StyleSpan(Typeface.ITALIC), 0, count, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
         AlertDialog.Builder(view.context)
             .setTitle(creature?.name)
-            .setMessage(creature?.description)
-            .setNegativeButton(android.R.string.cancel, null)
+            .setMessage(message)
+            .setNegativeButton(android.R.string.ok, null)
             .show()
     }
 
