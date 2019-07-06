@@ -42,6 +42,11 @@ class CreatureFragment : Fragment() {
         this.creature = creature
     }
 
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer?.stop()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,6 +83,7 @@ class CreatureFragment : Fragment() {
 
     private fun playAudio(view: View) {
         val creature = this.creature ?: return
+        view.isEnabled = false
         val folder = when (creature.type) {
             Creature.Type.PLANT -> "plant_sound"
             Creature.Type.ANIMAL -> "animal_sound"
@@ -91,14 +97,21 @@ class CreatureFragment : Fragment() {
 
     private fun onAudioUrlSuccess(uri: Uri) {
         mediaPlayer = MediaPlayer.create(context, uri).apply {
-            setAudioStreamType(AudioManager.STREAM_MUSIC)
-            prepare() // might take long! (for buffering, etc)
-            start()
+            //setAudioStreamType(AudioManager.STREAM_MUSIC)
+            setOnPreparedListener(MediaPlayer::start)
+            //prepareAsync() // might take long! (for buffering, etc)
         }
     }
 
     private fun onAudioUrlFailure(t: Throwable) {
         Log.e("ERRORE", "File Audio Url", t)
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (!isVisibleToUser) {
+            mediaPlayer?.stop()
+        }
     }
 
     private fun showInfo(view: View) {

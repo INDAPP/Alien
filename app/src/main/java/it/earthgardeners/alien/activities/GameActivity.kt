@@ -82,12 +82,18 @@ class GameActivity : AppCompatActivity() {
 
     override fun onStop() {
         timerHandler.removeCallbacks(timerRunnable)
+        habitatMediaPlayer?.pause()
         super.onStop()
     }
 
     override fun onStart() {
         super.onStart()
         timerHandler.postDelayed(timerRunnable, 1000)
+        try {
+            mediaPlayer?.start()
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        }
     }
 
     private fun setup() {
@@ -126,9 +132,10 @@ class GameActivity : AppCompatActivity() {
 
     private fun onHabitatSoundSuccess(uri: Uri) {
         this.habitatMediaPlayer = MediaPlayer.create(this, uri).apply {
-            setAudioStreamType(AudioManager.STREAM_MUSIC)
-            prepare() // might take long! (for buffering, etc)
-            start()
+//            setAudioStreamType(AudioManager.STREAM_MUSIC)
+            isLooping = true
+            setOnPreparedListener(MediaPlayer::start)
+//            prepareAsync() // might take long! (for buffering, etc)
         }
     }
 
