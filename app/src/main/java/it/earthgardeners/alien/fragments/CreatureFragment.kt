@@ -1,12 +1,16 @@
 package it.earthgardeners.alien.fragments
 
 import android.content.Context
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import it.earthgardeners.alien.AlienRepository
@@ -21,6 +25,7 @@ private const val ARG_TAG = "tag"
 class CreatureFragment : Fragment() {
     private var creature: Creature? = null
     private var listener: OnFragmentInteractionListener? = null
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +61,9 @@ class CreatureFragment : Fragment() {
         }
         val imageRef = FirebaseStorage.getInstance().getReference("$folder/${creature.tag}.jpg")
         Glide.with(this).load(imageRef).into(imageViewCreature)
+
+        buttonPlay.setOnClickListener(this::playAudio)
+        buttonInfo.setOnClickListener(this::showInfo)
     }
 
     override fun onAttach(context: Context) {
@@ -66,6 +74,40 @@ class CreatureFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    private fun playAudio(view: View) {
+        val creature = this.creature ?: return
+        val folder = when (creature.type) {
+            Creature.Type.PLANT -> "plant_sound"
+            Creature.Type.ANIMAL -> "animal_sound"
+        }
+
+        val soundRef = FirebaseStorage.getInstance().getReference("$folder/${creature.tag}.jpg")
+        soundRef.downloadUrl
+            .addOnSuccessListener(this::onAudioUrlSuccess)
+            .addOnFailureListener(this::onAudioUrlFailure)
+    }
+
+    private fun onAudioUrlSuccess(uri: Uri) {
+        mediaPlayer = MediaPlayer().apply {
+            setAudioStreamType(AudioManager.STREAM_MUSIC)
+            setDataSource(uri.toString())
+            prepare() // might take long! (for buffering, etc)
+            start()
+        }
+    }
+
+    private fun onAudioUrlFailure(t: Throwable) {
+        Log.e("ERRORE", "File Audio Url", t)
+    }
+
+    private fun showInfo(view: View) {
+        AlertDialog.Builder(view.context)
+            .setTitle(creature?.name)
+            .setMessage(creature?.description)
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     interface OnFragmentInteractionListener {

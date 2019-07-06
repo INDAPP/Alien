@@ -1,6 +1,7 @@
 package it.earthgardeners.alien.activities
 
 import android.content.Intent
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,6 +44,13 @@ class GameActivity : AppCompatActivity() {
 
     private lateinit var viewPagerAdapter: CreaturesPagerAdapter
     private lateinit var recyclerViewAdapter: CreaturesRecyclerViewAdapter
+
+    private var mediaPlayer: MediaPlayer? = null
+        set(value) {
+            field?.stop()
+            field = value
+            value?.start()
+        }
 
     private val currentCreature: Creature
         get() = when (creaturesType) {
@@ -104,7 +112,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun discardCreature(view: View) {
         nextCreature()
-        //TODO: riprodurre suono skip?
+        mediaPlayer = MediaPlayer.create(this, R.raw.choose)
     }
 
     private fun nextCreature() {
@@ -113,18 +121,17 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun checkInsertedCreature(creature: Creature) {
-        //TODO: riprodurre suoni, in base alla scelta
+        mediaPlayer = MediaPlayer.create(this, R.raw.choose)
 
         when {
             creature.alien.contains(habitat.tag) -> return gameOver()
             creature.habitat.contains(habitat.tag) -> {
                 this.creatures.add(currentCreature)
                 recyclerViewAdapter.notifyDataSetChanged()
-                //TODO: suono specie corretta
                 calculateProgress()
             }
             else -> {
-                //TODO: suono specie sbagliata
+
             }
         }
 
@@ -139,13 +146,17 @@ class GameActivity : AppCompatActivity() {
             //TODO: mostrare un popup/suono intermedio?
         } else if (validCreatures == targetPlantsCount + targetAnimalsCount) {
             startActivity(
-                Intent(this, ScoreActivity::class.java)
+                Intent(this, ScoreActivity::class.java).apply {
+
+                }
             )
         }
     }
 
     private fun gameOver() {
-
+        startActivity(
+            Intent(this, GameOverActivity::class.java)
+        )
     }
 
     inner class CreaturesPagerAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
