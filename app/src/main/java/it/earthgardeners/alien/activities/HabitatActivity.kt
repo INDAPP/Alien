@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 import it.earthgardeners.alien.AlienRepository
 import it.earthgardeners.alien.EXTRA_HABITAT_TAG
 import it.earthgardeners.alien.R
@@ -24,6 +26,12 @@ class HabitatActivity : AppCompatActivity() {
         buttonContinue.setOnClickListener(this::onButtonClick)
         val tag = intent?.getStringExtra(EXTRA_HABITAT_TAG)?: return finish()
         this.habitat = AlienRepository.habitats.firstOrNull { it.tag == tag }?: return finish()
+
+        textViewDescription.setText(habitat.description)
+        textViewTitle.setText(habitat.name)
+
+        val imageRef = FirebaseStorage.getInstance().getReference("habitat/${habitat.tag}.jpg")
+        Glide.with(this).load(imageRef).into(imageView)
     }
 
     private fun onButtonClick(view: View) {

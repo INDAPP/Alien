@@ -5,5 +5,6 @@
     <color name="colorAccent">#BE1522</color>
     <color name="colorButton">#2E7D32</color>
     <color name="colorBordeaux">#3D0606</color>
+    <color name="colorAlphaWhite">#80FFFFFF</color>
 
 </resources>
