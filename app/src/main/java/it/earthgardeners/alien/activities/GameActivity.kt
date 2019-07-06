@@ -133,6 +133,7 @@ class GameActivity : AppCompatActivity() {
     private fun onHabitatSoundSuccess(uri: Uri) {
         this.habitatMediaPlayer = MediaPlayer.create(this, uri).apply {
 //            setAudioStreamType(AudioManager.STREAM_MUSIC)
+            setVolume(0.5f, 0.5f)
             isLooping = true
             setOnPreparedListener(MediaPlayer::start)
 //            prepareAsync() // might take long! (for buffering, etc)
@@ -161,7 +162,8 @@ class GameActivity : AppCompatActivity() {
 
     private fun nextCreature() {
         currentCreatureIndex++
-        viewPager.setCurrentItem(currentCreatureIndex % creaturesTypeCount, true)
+        currentCreatureIndex %= creaturesTypeCount
+        viewPager.setCurrentItem(currentCreatureIndex, true)
         if (creatures.contains(currentCreature)) nextCreature()
     }
 

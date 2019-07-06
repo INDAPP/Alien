@@ -17,9 +17,9 @@ class ScoreActivity : AppCompatActivity() {
 
         buttonContinue.setOnClickListener(this::onButtonClick)
 
-        val time = intent?.getFloatExtra(EXTRA_TIME)?: return finish()
-        val wrong = intent?.getFloatExtra(EXTRA_ERROR_COUNT)?: return finish()
-        val total = intent?.getFloatExtra(EXTRA_TOTAL_COUNT)?: return finish()
+        val time = intent?.getFloatExtra(EXTRA_TIME, 1f)?: return finish()
+        val wrong = intent?.getFloatExtra(EXTRA_ERROR_COUNT, 0f)?: return finish()
+        val total = intent?.getFloatExtra(EXTRA_TOTAL_COUNT, 0f)?: return finish()
 
         textViewWrong.text = "$wrong"
         textViewTime.text =time.timer

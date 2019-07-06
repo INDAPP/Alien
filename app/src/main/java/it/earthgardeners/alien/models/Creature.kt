@@ -10,6 +10,7 @@ interface Creature {
     val name: String?
     val tag: String
     val description: String?
+    val latin: String?
     val alien: List<String>
     val habitat: List<String>
 

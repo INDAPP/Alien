@@ -10,7 +10,7 @@
 
     <ImageView
             android:layout_width="0dp"
-            android:layout_height="0dp" app:srcCompat="@android:drawable/btn_dialog"
+            android:layout_height="0dp" app:srcCompat="@drawable/img_background"
             android:id="@+id/imageView"
             android:scaleType="centerCrop" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"

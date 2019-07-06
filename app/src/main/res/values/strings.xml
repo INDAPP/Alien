@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">Alien</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_licence">
+        Aliens? È una app aperta. I contenuti sono stati prodotti dall’associazione EARTH GARDENERS e vengono rilasciati con licenza cc-by-sa nc, questo vuol dire che la licenza è Creative Commons(cc), che possono essere riusati purché per scopi non commerciali (nc), purché venga citato l’autore (by) e se vengono condivisi devono portarsi dietro la licenza (sa=share alike).\n
+        Anche il codice software con cui è sviluppata è aperto, viene infatti rilasciato come open source, abbiamo scelto la https://www.gnu.org/licenses/quick-guide-gplv3.it.html, le caratteristiche di questa licenza sono simili alla  cc-by-sa nc ma applicate al codice software.\n
+        Il software verrà distribuito tramite github.\n
+        L’applicazione verrà distribuita gratuitamente sui vari market.
+    </string>
+
+    <string name="app_guide">
+        1 - Ti viene proposto uno fra i sei habitat che compongono il gioco.\n
+        2 - Leggi con attenzione la sua descrizione.\n
+        3 - Cerca fra gli alberi a disposizione quelli che ti sembrano più adatti e inseriscili nell’habitat proposto.\n
+        4 - Passa al secondo livello, quello degli animali, e procedi come per gli alberi.\n
+            - Il punteggio dipenderà da:\n
+            - Numero di risposte esatte dei  punti.\n
+            - Dalla velocità delle risposte.\n
+            - Ogni volta che sceglierai una specie aliena andrai in GAME OVER!  ☹
+    </string>
+
 </resources>
