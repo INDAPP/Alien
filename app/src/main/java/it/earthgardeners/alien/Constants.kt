@@ -14,3 +14,5 @@ const val EXTRA_ERROR_COUNT = "error_count"
 const val EXTRA_TOTAL_COUNT = "total_count"
 
 const val EXTRA_TIME = "time"
+
+const val EXTRA_ALIEN = "alien"

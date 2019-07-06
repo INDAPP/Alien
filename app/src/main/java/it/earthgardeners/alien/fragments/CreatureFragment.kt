@@ -90,9 +90,8 @@ class CreatureFragment : Fragment() {
     }
 
     private fun onAudioUrlSuccess(uri: Uri) {
-        mediaPlayer = MediaPlayer().apply {
+        mediaPlayer = MediaPlayer.create(context, uri).apply {
             setAudioStreamType(AudioManager.STREAM_MUSIC)
-            setDataSource(uri.toString())
             prepare() // might take long! (for buffering, etc)
             start()
         }

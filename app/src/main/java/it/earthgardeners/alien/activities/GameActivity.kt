@@ -1,9 +1,13 @@
 package it.earthgardeners.alien.activities
 
 import android.content.Intent
+import android.media.AudioManager
 import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +53,7 @@ class GameActivity : AppCompatActivity() {
             field = value
             value?.start()
         }
+    private var habitatMediaPlayer: MediaPlayer? = null
 
     private val currentCreature: Creature
         get() = when (creaturesType) {
@@ -57,6 +62,10 @@ class GameActivity : AppCompatActivity() {
         }
 
     private var errorCounter = 0
+
+    private val timerHandler = Handler()
+    private val timerRunnable = Runnable(this::tick)
+    private var timerSeconds: Float = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +78,16 @@ class GameActivity : AppCompatActivity() {
         this.plants = AlienRepository.plants.toMutableList()
 
         setup()
+    }
+
+    override fun onStop() {
+        timerHandler.removeCallbacks(timerRunnable)
+        super.onStop()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        timerHandler.postDelayed(timerRunnable, 1000)
     }
 
     private fun setup() {
@@ -96,21 +115,36 @@ class GameActivity : AppCompatActivity() {
 
         Glide.with(this).load(imageRef).into(imageView)
 
-        //TODO: impostare i suoni di sottofondo
+        val soundRef = FirebaseStorage.getInstance().getReference("habitat_sound/${habitat.tag}.mp3")
+        soundRef.downloadUrl
+            .addOnSuccessListener(this::onHabitatSoundSuccess)
+            .addOnFailureListener(this::onHabitatSoundFailure)
 
         buttonInsert.setOnClickListener(this::insertCreature)
         buttonDiscard.setOnClickListener(this::discardCreature)
     }
 
+    private fun onHabitatSoundSuccess(uri: Uri) {
+        this.habitatMediaPlayer = MediaPlayer.create(this, uri).apply {
+            setAudioStreamType(AudioManager.STREAM_MUSIC)
+            prepare() // might take long! (for buffering, etc)
+            start()
+        }
+    }
+
+    private fun onHabitatSoundFailure(t: Throwable) {
+        Log.e("ERROR", "Errore sottofondo habitat", t)
+    }
+
+    private fun tick() {
+        timerHandler.postDelayed(timerRunnable, 1000)
+        timerSeconds++
+        textViewTimer.text = timerSeconds.timer
+    }
+
     private fun insertCreature(view: View) {
         checkInsertedCreature(currentCreature)
         nextCreature()
-        mediaPlayer = MediaPlayer.create(this, R.raw.choose)
-//        when (creaturesType) {
-//            Creature.Type.PLANT -> plants.removeAt(currentCreatureIndex)
-//            Creature.Type.ANIMAL -> animals.removeAt(currentCreatureIndex)
-//        }
-//        viewPagerAdapter.notifyDataSetChanged()
     }
 
     private fun discardCreature(view: View) {
@@ -127,15 +161,16 @@ class GameActivity : AppCompatActivity() {
     private fun checkInsertedCreature(creature: Creature) {
         when {
             creature.alien.contains(habitat.tag) -> {
-                toast("Hai inserito una specie Aliena!!")
-                return gameOver()
+                return gameOver(true)
             }
             creature.habitat.contains(habitat.tag) -> {
+                mediaPlayer = MediaPlayer.create(this, R.raw.choose)
                 this.creatures.add(currentCreature)
                 recyclerViewAdapter.notifyDataSetChanged()
                 calculateProgress()
             }
             else -> {
+                mediaPlayer = MediaPlayer.create(this, R.raw.wrong)
                 errorCounter++
                 //TODO: animazione alieno??
                 checkGameOver()
@@ -155,7 +190,7 @@ class GameActivity : AppCompatActivity() {
                 Intent(this, ScoreActivity::class.java).apply {
                     putExtra(EXTRA_TOTAL_COUNT, (targetPlantsCount+targetAnimalsCount).toFloat())
                     putExtra(EXTRA_ERROR_COUNT, errorCounter.toFloat())
-                    putExtra(EXTRA_TIME, 0) //timer contatore
+                    putExtra(EXTRA_TIME, timerSeconds) //timer contatore
                 }
             )
         }
@@ -163,14 +198,15 @@ class GameActivity : AppCompatActivity() {
 
     private fun checkGameOver() {
         if (errorCounter >= targetPlantsCount + targetAnimalsCount) {
-            toast("Hai commesso troppi errori!!")
-            gameOver()
+            gameOver(false)
         }
     }
 
-    private fun gameOver() {
+    private fun gameOver(alien: Boolean) {
         startActivity(
-            Intent(this, GameOverActivity::class.java)
+            Intent(this, GameOverActivity::class.java).apply {
+                putExtra(EXTRA_ALIEN, alien)
+            }
         )
     }
 

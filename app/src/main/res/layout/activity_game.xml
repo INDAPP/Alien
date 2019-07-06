@@ -23,9 +23,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|end"
-                tools:text="00:00" android:fontFamily="monospace" tools:layout_editor_absoluteY="2dp"
-                tools:layout_editor_absoluteX="16dp" android:textSize="24sp" android:textColor="#FFFFFF"
-                android:textStyle="bold" android:paddingEnd="16dp"/>
+                tools:text="00:00"
+                tools:layout_editor_absoluteY="2dp"
+                tools:layout_editor_absoluteX="16dp"
+                android:textSize="24sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
 
     </androidx.appcompat.widget.Toolbar>
     <ImageView
@@ -55,6 +60,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/buttonDiscard"
+            android:background="@drawable/login_button"
+            android:layout_margin="8dp"
+            android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/buttonInsert"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -64,6 +72,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/buttonInsert"
+            android:background="@drawable/login_button"
+            android:layout_margin="8dp"
+            android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/buttonDiscard"
             app:layout_constraintBottom_toBottomOf="parent"

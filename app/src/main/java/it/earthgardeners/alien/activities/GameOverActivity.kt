@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import androidx.core.app.ActivityCompat
+import it.earthgardeners.alien.EXTRA_ALIEN
 import it.earthgardeners.alien.R
+import it.earthgardeners.alien.toast
 
 class GameOverActivity : AppCompatActivity() {
 
@@ -13,9 +15,17 @@ class GameOverActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_over)
 
-        MediaPlayer.create(this, R.raw.game_over)?.start()
-
         Handler().postDelayed(this::close, 5000)
+
+        val alien = intent.getBooleanExtra(EXTRA_ALIEN, false)
+
+        if (alien) {
+            MediaPlayer.create(this, R.raw.alien)?.start()
+            toast("Hai inserito una specie Aliena!!")
+        } else {
+            MediaPlayer.create(this, R.raw.game_over)?.start()
+            toast("Hai commesso troppi errori!!")
+        }
     }
 
     override fun onBackPressed() {
