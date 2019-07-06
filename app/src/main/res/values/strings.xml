@@ -19,4 +19,16 @@
             - Ogni volta che sceglierai una specie aliena andrai in GAME OVER!  ☹
     </string>
 
+    <string name="app_info">
+        Cos’è una specie autoctona o nativa?\n\n
+        E’ una pianta o un animale che è presente in un determinato luogo da sempre.\n\n
+        Cos’è una specie aliena?\n\n
+        E’ una pianta o un animale che ha avuto origine in un luogo lontano e che gli uomini hanno
+        portato in altri paesi perché è buona da mangiare o perché è utile per fare legna o perché è bella
+        da vedere.\n\n
+        Cos’è una specie aliena invasiva?\n\n
+        E’ una pianta o un animale alieno che trovandosi bene in una regione si sviluppa moltissimo a
+        danno delle specie autoctone.
+    </string>
+
 </resources>

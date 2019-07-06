@@ -1,6 +1,7 @@
 package it.earthgardeners.alien.activities
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity() {
         buttonStart.setOnClickListener(this::onButtonClick)
         buttonGuide.setOnClickListener(this::showGuide)
         buttonLicence.setOnClickListener(this::showLicence)
+        buttonInfo.setOnClickListener(this::showInfo)
+        buttonWeb.setOnClickListener(this::showBrowser)
     }
 
     private fun onButtonClick(view: View) {
@@ -43,5 +46,19 @@ class MainActivity : AppCompatActivity() {
             .setMessage(R.string.app_licence)
             .setPositiveButton(android.R.string.ok, null)
             .show()
+    }
+
+    private fun showInfo(view: View) {
+        AlertDialog.Builder(this)
+            .setMessage(R.string.app_info)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
+    private fun showBrowser(view: View) {
+        val link = "http://earthgardeners.it/"
+        startActivity(
+            Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        )
     }
 }

@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import it.earthgardeners.alien.*
@@ -181,7 +182,6 @@ class GameActivity : AppCompatActivity() {
             else -> {
                 mediaPlayer = MediaPlayer.create(this, R.raw.wrong)
                 errorCounter++
-                //TODO: animazione alieno??
                 checkGameOver()
             }
         }
@@ -192,8 +192,8 @@ class GameActivity : AppCompatActivity() {
         progressBar.progress = creatures.size
         if (creatures.size == targetPlantsCount) {
             creaturesType = Creature.Type.ANIMAL
+            currentCreatureIndex = 0
             viewPagerAdapter.notifyDataSetChanged()
-            //TODO: mostrare un popup/suono intermedio?
         } else if (creatures.size == targetPlantsCount + targetAnimalsCount) {
             startActivity(
                 Intent(this, ScoreActivity::class.java).apply {
@@ -219,7 +219,7 @@ class GameActivity : AppCompatActivity() {
         )
     }
 
-    inner class CreaturesPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
+    inner class CreaturesPagerAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment = when (creaturesType) {
             Creature.Type.PLANT -> CreatureFragment.newInstance(this@GameActivity.plants[position])
@@ -229,6 +229,10 @@ class GameActivity : AppCompatActivity() {
         override fun getCount(): Int = when (creaturesType) {
             Creature.Type.PLANT -> this@GameActivity.plants.size
             Creature.Type.ANIMAL -> this@GameActivity.animals.size
+        }
+
+        override fun getItemPosition(`object`: Any): Int {
+            return PagerAdapter.POSITION_NONE
         }
 
     }
