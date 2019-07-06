@@ -83,7 +83,7 @@ class CreatureFragment : Fragment() {
             Creature.Type.ANIMAL -> "animal_sound"
         }
 
-        val soundRef = FirebaseStorage.getInstance().getReference("$folder/${creature.tag}.jpg")
+        val soundRef = FirebaseStorage.getInstance().getReference("$folder/${creature.tag}.m4a")
         soundRef.downloadUrl
             .addOnSuccessListener(this::onAudioUrlSuccess)
             .addOnFailureListener(this::onAudioUrlFailure)

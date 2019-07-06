@@ -42,7 +42,7 @@
                     tools:text="Nome della specie"
                     android:textStyle="bold"
                     android:textSize="24sp"
-                    android:textAppearance="@style/" android:fontFamily="sans-serif-medium"
+                    android:fontFamily="sans-serif-medium"
                     android:textColor="#303030"/>
             <Button
                     android:id="@+id/buttonInfo"

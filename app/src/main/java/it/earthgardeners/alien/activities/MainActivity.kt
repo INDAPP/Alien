@@ -7,6 +7,7 @@ import android.view.View
 import it.earthgardeners.alien.AlienRepository
 import it.earthgardeners.alien.EXTRA_HABITAT_TAG
 import it.earthgardeners.alien.R
+import it.earthgardeners.alien.toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onButtonClick(view: View) {
-        val habitatSelected = AlienRepository.habitats.map { it.tag }.shuffled().first()
+        val habitatSelected = AlienRepository.habitats.map { it.tag }.shuffled().firstOrNull()
+            ?: return toast("Errore di sincronizzazione")
         val intent = Intent(this, HabitatActivity::class.java).apply {
             putExtra(EXTRA_HABITAT_TAG, habitatSelected)
         }
